@@ -45,6 +45,26 @@ You get a clear alert when:
 
 ## Installation
 
+### Quick install (installer scripts)
+
+Download or clone this repo. Quit Illustrator, then run the installer from the repo folder. It copies each script into every Illustrator and InDesign version and language it finds.
+
+- **macOS:** run this in Terminal from the repo folder. You may be asked for your password, because the Illustrator folder in `/Applications` can need admin rights.
+
+  ```bash
+  bash install.sh
+  ```
+
+- **Windows:** right-click `install.ps1` › **Run with PowerShell**, or run the command below. Writing to `Program Files` needs an **Administrator** PowerShell.
+
+  ```powershell
+  powershell -ExecutionPolicy Bypass -File .\install.ps1
+  ```
+
+InDesign creates its Scripts folder the first time it starts, so launch it once before installing.
+
+To install by hand instead, follow the steps below.
+
 ### Illustrator
 
 1. Quit Illustrator.
