@@ -55,6 +55,8 @@ Download or clone this repo. Quit Illustrator, then run the installer from the r
   bash install.sh
   ```
 
+  It also assigns **`Shift + Cmd + R`** to the Illustrator script through a macOS App Shortcut, which you'll see after restarting Illustrator. To skip that, run `bash install.sh --no-shortcut`. You still set the InDesign shortcut by hand, as described below.
+
 - **Windows:** right-click `install.ps1` › **Run with PowerShell**, or run the command below. Writing to `Program Files` needs an **Administrator** PowerShell.
 
   ```powershell

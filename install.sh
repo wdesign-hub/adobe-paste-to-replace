@@ -48,6 +48,7 @@ for dir in "$APPS_DIR"/Adobe\ Illustrator*/Presets*/*/Scripts; do
   found=1
   copy_to "$AI_FILE" "$dir"
 done
+ai_found=$found
 [ $found -eq 1 ] || echo "  – No Illustrator Scripts folder found in $APPS_DIR"
 
 echo "InDesign:"
@@ -59,12 +60,37 @@ for dir in "$PREFS_DIR"/Adobe\ InDesign/Version*/*/Scripts/Scripts\ Panel; do
 done
 [ $found -eq 1 ] || echo "  – No InDesign Scripts Panel folder found (launch InDesign once, then run this again)"
 
+# --- Illustrator keyboard shortcut (macOS App Shortcut) ---------------------
+# Illustrator can't bind shortcuts to scripts itself, but every script is a
+# menu item (File › Scripts › PasteToReplace_Illustrator), so a macOS App
+# Shortcut works. "@$r" = Cmd + Shift + R. Skip with: bash install.sh --no-shortcut
+shortcut_set=0
+if [ "${1:-}" != "--no-shortcut" ] && [ $ai_found -eq 1 ]; then
+  echo "Illustrator shortcut:"
+  bundles=""
+  for app in "$APPS_DIR"/Adobe\ Illustrator*/Adobe\ Illustrator*.app; do
+    id="$(defaults read "$app/Contents/Info" CFBundleIdentifier 2>/dev/null)"
+    [ -n "$id" ] && bundles="$bundles $id"
+  done
+  [ -n "$bundles" ] || bundles="com.adobe.illustrator"
+  for id in $(printf '%s\n' $bundles | sort -u); do
+    if defaults write "$id" NSUserKeyEquivalents -dict-add "PasteToReplace_Illustrator" '@$r'; then
+      echo "  ✓ Shift + Cmd + R → PasteToReplace_Illustrator ($id)"
+      shortcut_set=1
+    else
+      echo "  ✗ Could not set the shortcut for $id" >&2
+    fi
+  done
+fi
+
 echo
 if [ $installed -gt 0 ]; then
   echo "Done: $installed file(s) installed."
   echo "Illustrator: restart it, then File › Scripts › PasteToReplace_Illustrator"
+  [ $shortcut_set -eq 1 ] && echo "             (Shift + Cmd + R is shown next to it after the restart)"
   echo "InDesign:    Window › Utilities › Scripts › User › PasteToReplace_InDesign.jsx"
-  echo "Keyboard shortcut setup: see README.md"
+  echo "             Shortcut: Edit › Keyboard Shortcuts › New Set… › Product Area: Scripts"
+  echo "             › PasteToReplace_InDesign.jsx › press Shift + Cmd + R › Context: Default › Assign"
 else
   echo "Nothing was installed." >&2
   exit 1
