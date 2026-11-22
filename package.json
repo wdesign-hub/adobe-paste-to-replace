@@ -1,0 +1,13 @@
+{
+  "name": "adobe-paste-to-replace",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Figma-style Paste to Replace scripts for Adobe Illustrator and InDesign",
+  "scripts": {
+    "test": "node --test tests/*.test.js"
+  },
+  "devDependencies": {
+    "acorn": "^8.12.1"
+  },
+  "license": "MIT"
+}
